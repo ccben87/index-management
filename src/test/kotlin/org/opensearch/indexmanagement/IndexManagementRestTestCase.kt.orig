@@ -5,8 +5,8 @@
 
 package org.opensearch.indexmanagement
 
-import org.apache.hc.core5.http.ContentType
-import org.apache.hc.core5.http.io.entity.StringEntity
+import org.apache.http.entity.ContentType
+import org.apache.http.entity.StringEntity
 import org.apache.logging.log4j.LogManager
 import org.junit.AfterClass
 import org.junit.Before
@@ -34,6 +34,7 @@ import java.io.IOException
 import java.nio.file.Files
 import java.time.Duration
 import java.time.Instant
+import java.util.*
 import java.util.Date
 import javax.management.MBeanServerInvocationHandler
 import javax.management.ObjectName
@@ -41,7 +42,12 @@ import javax.management.remote.JMXConnectorFactory
 import javax.management.remote.JMXServiceURL
 
 abstract class IndexManagementRestTestCase : ODFERestTestCase() {
+<<<<<<< HEAD
+
+    val configSchemaVersion = 21
+=======
     val configSchemaVersion = 22
+>>>>>>> 309321ee (Convert-Index-To-Remote action added)
     val historySchemaVersion = 7
 
     // Having issues with tests leaking into other tests and mappings being incorrect and they are not caught by any pending task wait check as
@@ -91,10 +97,7 @@ abstract class IndexManagementRestTestCase : ODFERestTestCase() {
     protected val isDebuggingRemoteCluster = System.getProperty("cluster.debug", "false")!!.toBoolean()
 
     protected val isLocalTest = clusterName() == "integTest"
-
-    private fun clusterName(): String {
-        return System.getProperty("tests.clustername")
-    }
+    private fun clusterName(): String = System.getProperty("tests.clustername")
 
     fun Response.asMap(): Map<String, Any> = entityAsMap(this)
 
@@ -262,7 +265,6 @@ abstract class IndexManagementRestTestCase : ODFERestTestCase() {
     }
 
     override fun preserveIndicesUponCompletion(): Boolean = true
-
     companion object {
         val isMultiNode = System.getProperty("cluster.number_of_nodes", "1").toInt() > 1
         val isBWCTest = System.getProperty("tests.plugin_bwc_version", "0") != "0"
@@ -290,7 +292,7 @@ abstract class IndexManagementRestTestCase : ODFERestTestCase() {
             }
 
             val response = client.performRequest(Request("GET", "/_cat/indices?format=json&expand_wildcards=all"))
-            val xContentType = MediaType.fromMediaType(response.entity.contentType)
+            val xContentType = MediaType.fromMediaType(response.entity.contentType.value)
             xContentType.xContent().createParser(
                 NamedXContentRegistry.EMPTY, DeprecationHandler.THROW_UNSUPPORTED_OPERATION,
                 response.entity.content,
@@ -359,7 +361,7 @@ abstract class IndexManagementRestTestCase : ODFERestTestCase() {
         protected fun waitForThreadPools(client: RestClient) {
             val response = client.performRequest(Request("GET", "/_cat/thread_pool?format=json"))
 
-            val xContentType = MediaType.fromMediaType(response.entity.contentType)
+            val xContentType = MediaType.fromMediaType(response.entity.contentType.value)
             xContentType.xContent().createParser(
                 NamedXContentRegistry.EMPTY, DeprecationHandler.THROW_UNSUPPORTED_OPERATION,
                 response.entity.content,
@@ -382,9 +384,7 @@ abstract class IndexManagementRestTestCase : ODFERestTestCase() {
             var sessionId: String?
 
             fun getExecutionData(reset: Boolean): ByteArray?
-
             fun dump(reset: Boolean)
-
             fun reset()
         }
 
@@ -404,13 +404,12 @@ abstract class IndexManagementRestTestCase : ODFERestTestCase() {
             val jacocoBuildPath = System.getProperty("jacoco.dir") ?: return
             val serverUrl = "service:jmx:rmi:///jndi/rmi://127.0.0.1:7777/jmxrmi"
             JMXConnectorFactory.connect(JMXServiceURL(serverUrl)).use { connector ->
-                val proxy =
-                    MBeanServerInvocationHandler.newProxyInstance(
-                        connector.mBeanServerConnection,
-                        ObjectName("org.jacoco:type=Runtime"),
-                        IProxy::class.java,
-                        false,
-                    )
+                val proxy = MBeanServerInvocationHandler.newProxyInstance(
+                    connector.mBeanServerConnection,
+                    ObjectName("org.jacoco:type=Runtime"),
+                    IProxy::class.java,
+                    false,
+                )
                 proxy.getExecutionData(false)?.let {
                     val path = PathUtils.get("$jacocoBuildPath/integTest.exec")
                     Files.write(path, it)
