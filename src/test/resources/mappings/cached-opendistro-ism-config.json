@@ -219,6 +219,16 @@
                     }
                   }
                 },
+                "convert_index_to_remote": {
+                  "properties": {
+                    "repository": {
+                      "type": "keyword"
+                    },
+                    "snapshot": {
+                      "type": "keyword"
+                    }
+                  }
+                },
                 "rollover": {
                   "properties": {
                     "min_size": {
