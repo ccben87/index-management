@@ -187,6 +187,18 @@ tasks.named('forbiddenApisTest').configure {
 
 ext {
     projectSubstitutions = [:]
+
+    ['esnode.pem', 'esnode-key.pem', 'kirk.pem', 'kirk-key.pem', 'root-ca.pem', 'sample.pem', 'test-kirk.jks'].forEach { file ->
+        File local = getLayout().getBuildDirectory().file(file).get().getAsFile()
+        download.run {
+            src "https://raw.githubusercontent.com/opensearch-project/security/refs/heads/main/bwc-test/src/test/resources/security/" + file
+            dest local
+            overwrite false
+        }
+        processResources {
+            from(local)
+        }
+    }
 }
 
 allprojects {
@@ -677,6 +689,7 @@ Integer bwcNumNodes = 3
     testClusters {
         "${baseName}$i"{
             testDistribution = "ARCHIVE"
+            versions = [bwcVersionShort, opensearch_version]
             numberOfNodes = bwcNumNodes
             if (bwcBundleTest) {
                 versions = [

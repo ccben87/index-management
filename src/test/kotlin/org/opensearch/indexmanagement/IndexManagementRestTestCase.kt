@@ -93,6 +93,7 @@ abstract class IndexManagementRestTestCase : ODFERestTestCase() {
     protected val isDebuggingRemoteCluster = System.getProperty("cluster.debug", "false")!!.toBoolean()
 
     protected val isLocalTest = clusterName() == "integTest"
+
     private fun clusterName(): String = System.getProperty("tests.clustername")
 
     fun Response.asMap(): Map<String, Any> = entityAsMap(this)
@@ -261,6 +262,7 @@ abstract class IndexManagementRestTestCase : ODFERestTestCase() {
     }
 
     override fun preserveIndicesUponCompletion(): Boolean = true
+
     companion object {
         val isMultiNode = System.getProperty("cluster.number_of_nodes", "1").toInt() > 1
         val isBWCTest = System.getProperty("tests.plugin_bwc_version", "0") != "0"
@@ -380,7 +382,9 @@ abstract class IndexManagementRestTestCase : ODFERestTestCase() {
             var sessionId: String?
 
             fun getExecutionData(reset: Boolean): ByteArray?
+
             fun dump(reset: Boolean)
+
             fun reset()
         }
 

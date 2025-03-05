@@ -383,6 +383,10 @@
                             }
                           }
                         },
+                        "target_index_settings": {
+                          "dynamic": "true",
+                          "type": "object"
+                        },
                         "page_size": {
                           "type": "long"
                         },
@@ -1006,6 +1010,10 @@
               "ignore_above": 256
             }
           }
+        },
+        "target_index_settings": {
+          "dynamic": "true",
+          "type": "object"
         },
         "page_size": {
           "type": "long"
