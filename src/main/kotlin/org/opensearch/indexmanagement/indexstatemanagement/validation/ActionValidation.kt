@@ -68,6 +68,7 @@ class ActionValidation(
                     ValidateNothing(settings, clusterService, jvmService).execute(indexName)
                 }
             }
+          }
         }
         return ValidationResult(validation.validationMessage.toString(), validation.validationStatus)
     }
