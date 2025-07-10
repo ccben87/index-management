@@ -37,26 +37,6 @@ class ISMActionsParser private constructor() {
         val instance = ISMActionsParser()
     }
 
-    val parsers = mutableListOf(
-        AliasActionParser(),
-        AllocationActionParser(),
-        CloseActionParser(),
-        DeleteActionParser(),
-        ForceMergeActionParser(),
-        IndexPriorityActionParser(),
-        NotificationActionParser(),
-        OpenActionParser(),
-        ReadOnlyActionParser(),
-        ReadWriteActionParser(),
-        ReplicaCountActionParser(),
-        RollupActionParser(),
-        RolloverActionParser(),
-        ShrinkActionParser(),
-        SnapshotActionParser(),
-        StopReplicationActionParser(),
-        TransformActionParser(),
-    )
-
     val parsers =
         mutableListOf(
             AliasActionParser(),
