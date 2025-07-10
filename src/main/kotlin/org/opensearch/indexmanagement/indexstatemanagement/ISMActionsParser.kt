@@ -55,6 +55,7 @@ class ISMActionsParser private constructor() {
             ShrinkActionParser(),
             SnapshotActionParser(),
             TransformActionParser(),
+            StopReplicationActionParser(),
             ConvertIndexToRemoteActionParser(),
         )
 
